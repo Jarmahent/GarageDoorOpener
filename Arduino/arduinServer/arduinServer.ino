@@ -80,39 +80,17 @@ void setup() {
   server.on("/", [](){
       server.send(200, "text/html", webPage);
     }); 
-  server.on("/socket1Fwd", [](){
-      server.send(200, "text/html", webPage);
-      digitalWrite(pin0, HIGH);
-      delay(500);
-      digitalWrite(pin0, LOW);
-      Serial.println("FORWARD");
-      delay(500);
-    });
-  server.on("/socket1Bkwd", [](){
-      server.send(200, "text/html", webPage);
-      digitalWrite(pin1, HIGH);
-      delay(500);
-      digitalWrite(pin1, LOW);
-      Serial.println("BACKWARDS");
-      delay(500);
-    });
   server.on("/pinOn", [](){
       server.send(200, "text/html", webPage);
       digitalWrite(pin2, HIGH);
-      Serial.println(" STEER LEFT");
-      delay(500);
-    });
-  server.on("/socket1Rgt", [](){
-      server.send(200, "text/html", webPage);
-      digitalWrite(pin3, HIGH);
-      Serial.println(" STEER RIGHT ");
+      Serial.println("Light ON");
       delay(500);
     });
   server.on("/pinOff", [](){
       server.send(200, "text/html", webPage);
       digitalWrite(pin2, LOW);
       digitalWrite(pin3, LOW);
-      Serial.println(" POINTING STRAIGHT ");
+      Serial.println("Light OFF");
       delay(500);
     });      
   server.begin();
