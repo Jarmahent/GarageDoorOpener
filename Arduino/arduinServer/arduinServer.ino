@@ -8,13 +8,35 @@ ESP8266WebServer server(80);
 
 const char* ssid = "Hernandez2.4Ghz";
 const char* password = "leoht777";
-int pin0 = 5;
-int pin1 = 4;
-int pin2 = 0;
-int pin3 = 14;
+ 
+const int trigPin = 5;
+const int echoPin = 4;
+
+long duration;
+int distance;
 
 String webPage = "";
+
+
+
+int getDistance(){
+  
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(1);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * 0.034/2;
+  
+  return distance;
+  }
+
 void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
   
   webPage += 
   "<h1>ESP8266 Web Server</h1>"
@@ -35,19 +57,6 @@ void setup() {
   "<button>OFF</button>"
   "</a>"
   "</p>";
-
-  pinMode(pin0, OUTPUT);
-  digitalWrite(pin0, LOW);
-
-  pinMode(pin1, OUTPUT);
-  digitalWrite(pin0, LOW);
-
-  pinMode(pin2, OUTPUT);
-  digitalWrite(pin0, LOW);
-
-  pinMode(pin3, OUTPUT);
-  digitalWrite(pin3, LOW);
-  
   
   Serial.begin(115200);
   delay(100);
@@ -82,14 +91,16 @@ void setup() {
     }); 
   server.on("/pinOn", [](){
       server.send(200, "text/html", webPage);
-      digitalWrite(pin2, HIGH);
+//      digitalWrite(pin2, HIGH);
+      int actualDistance = getDistance();
+      Serial.println(actualDistance);
       Serial.println("Light ON");
       delay(500);
     });
   server.on("/pinOff", [](){
       server.send(200, "text/html", webPage);
-      digitalWrite(pin2, LOW);
-      digitalWrite(pin3, LOW);
+//      digitalWrite(pin2, LOW);
+//      digitalWrite(pin3, LOW);
       Serial.println("Light OFF");
       delay(500);
     });      
@@ -98,10 +109,9 @@ void setup() {
 
 }
 
-int value = 0;
-
 
 void loop() {
    server.handleClient();
-
+  int actualDistance = getDistance();
+      Serial.println(actualDistance);
 }
